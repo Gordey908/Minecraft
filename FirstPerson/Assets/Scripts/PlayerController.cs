@@ -21,6 +21,13 @@ public class PlayerController : MonoBehaviour
     public List<ItemData> inventoryItems, currentChestItems;
     private bool canMove = true;
 
+    public static PlayerController instance;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private void Start()
     {
         inventoryItems = new List<ItemData>();

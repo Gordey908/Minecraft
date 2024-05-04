@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5290828244455096256}
   - component: {fileID: 5290828244455096257}
   - component: {fileID: 5290828244455094334}
-  - component: {fileID: -5079717462497107929}
+  - component: {fileID: 1707097103503985516}
   m_Layer: 0
   m_Name: Grass
   m_TagString: Block
@@ -134,7 +134,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-5079717462497107929
+--- !u!114 &1707097103503985516
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5290828244455094335}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b087beea9274ded49896d3e959a22a2f, type: 3}
+  m_Script: {fileID: 11500000, guid: 50fa225a1ba382e4688b6212e10ce198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 70

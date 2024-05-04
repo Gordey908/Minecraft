@@ -10,7 +10,6 @@ public class Slot : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHa
     private Transform tempParentForSlots;
     [SerializeField]
     private Text descriptionPanelText;
-    private PlayerController pController;
     private string parentName;
     public ItemData itemData;
 
@@ -19,52 +18,86 @@ public class Slot : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHa
         parentName = transform.parent.name;
     }
 
-    private void AddToListOnDrag(List<GameObjcet> slots, List<ItemData> items, Transform parent)
+    private void AddToListOnDrag(List<GameObject> slots, List<ItemData> items, Transform parent, ItemData itemData)
     {
         if (itemData == null) return;
+
+        bool destroyed = false;
+
+        if (itemData.isUniq || slots.Count == 0)
         {
-            if (itemData.isUniq || slots.Count == 0)
+            slots.Add(gameObject);
+            items.Add(itemData);
+            transform.SetParent(parent);
+            parentName = transform.parent.name;
+        }
+        else
+        {
+            for (int i = 0; i < slots.Count; i++)
+            {
+                if (slots[i].GetComponent<Slot>().itemData.id == itemData.id)
+                {
+                    items[i].count += itemData.count;
+                    slots[i].transform.Find("ItemCountText").GetComponent<Text>().text = items[i].count.ToString();
+                    Destroy(gameObject);
+                    destroyed = true;
+                    break;
+                }
+            }
+
+            if (!destroyed)
             {
                 slots.Add(gameObject);
                 items.Add(itemData);
-                teansform.SetParent(parent);
-                parentName = transforrm.parent.name;
-            }
-            else if (!itemData.isUniq)
-            {
-                for (int i = 0; i < slots.Count; i++)
-                {
-                    if (slot[i].GetComponent<Slot>().itemData.id == itemData.id)
-                    {
-                        items[i].count += itemData;
-                        slots[i].transform.Find("ItemCountText").GetComonent<Text>().text = slots[i].GetComponent<Slot>().itemData.count.ToString();
-                        Destroy(gameObject);
-                        break;
-                    }
-                    else if(i == slots.Count - 1)
-                    {
-                        slots.Add(gameObject);
-                        items.Add(itemData);
-                        transform.SetParent(parent);
-                        parentName = transform.parent.name;
-                        break;
-                    }
-                }
+                transform.SetParent(parent);
+                parentName = transform.parent.name;
             }
         }
     }
+
     public void OnDrag(PointerEventData eventData)
     {
         InventoryManager.instance.GetDescriptionPanel().SetActive(false);
-        transform.SetParent(tempParentForSlots);
+        transform.SetParent(InventoryManager.instance.GetTempParentForSlots());
         transform.position = eventData.position;
 
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        
+        var pController = PlayerController.instance;
+        var inventoryManager = InventoryManager.instance;
+        float slotInventoryContentDistance = Vector3.Distance(transform.position, inventoryManager.GetInventoryContent().transform.position);
+        float slotChestContentDistance = Vector3.Distance(transform.position, inventoryManager.GetChestContent().transform.position);
+
+        if (slotInventoryContentDistance < slotChestContentDistance)
+        {
+            if (parentName == "InventoryContent")
+            {
+                transform.SetParent(inventoryManager.GetInventoryContent().transform);
+            }
+            else
+            {
+                inventoryManager.currentChestSlots.Remove(gameObject);
+                pController.currentChestItems.Remove(itemData);
+                AddToListOnDrag(inventoryManager.inventorySlots, pController.inventoryItems, inventoryManager.GetInventoryContent().transform, itemData);
+            }
+        }
+        else
+        {
+            if (parentName == "ChestContent")
+            {
+                transform.SetParent(inventoryManager.GetChestContent().transform);
+            }
+            else
+            {
+                inventoryManager.inventorySlots.Remove(gameObject);
+                pController.inventoryItems.Remove(itemData);
+                AddToListOnDrag(inventoryManager.currentChestSlots, pController.inventoryItems, inventoryManager.GetChestContent().transform, itemData);
+            }
+        }
     }
+
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -72,7 +105,7 @@ public class Slot : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHa
         iManager.GetDescriptionPanel().SetActive(true);
         if(itemData != null)
         {
-            descriptionPanelText.text = itemData.description;
+            iManager.text = itemData.description;
         }
     }
 

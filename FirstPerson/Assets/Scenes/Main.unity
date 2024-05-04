@@ -2862,12 +2862,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 177f97f128f8ae8438f05e7a3762a0c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotPref: {fileID: 8261982369419719312, guid: 1073e25fe5209b548998baf40a9f5136, type: 3}
+  slotPref: {fileID: 3096305351475804158, guid: 1073e25fe5209b548998baf40a9f5136, type: 3}
   inventoryPanel: {fileID: 1209172135}
   chestPanel: {fileID: 619598635}
   inventoryContent: {fileID: 1235133882}
   chestContent: {fileID: 845130364}
-  descriptionPanel: {fileID: 0}
+  descriptionPanel: {fileID: 168499360}
   items:
   - name: Pickaxe
     description: Resource extraction tool

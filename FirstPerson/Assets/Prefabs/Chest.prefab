@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 7346413201358957124}
   - component: {fileID: 5934733271395116513}
   - component: {fileID: 8482704989274394923}
-  - component: {fileID: 8101722710197566022}
-  - component: {fileID: 6715544186522371808}
+  - component: {fileID: 869120051823762892}
+  - component: {fileID: 3981085910276864408}
   m_Layer: 0
   m_Name: Chest
-  m_TagString: Chest
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -85,7 +85,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8101722710197566022
+--- !u!65 &869120051823762892
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -106,7 +106,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 2.0000002, z: 2.0000002}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6715544186522371808
+--- !u!114 &3981085910276864408
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,6 +115,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7978235929272643838}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff4afcd43f329a249b88385588a19ec7, type: 3}
+  m_Script: {fileID: 11500000, guid: 12c300b52670e044883ec3ce642ef480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
