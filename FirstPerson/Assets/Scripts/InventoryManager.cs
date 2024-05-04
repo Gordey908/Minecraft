@@ -6,6 +6,10 @@ using UnityEngine.UI;
 public class InventoryManager : MonoBehaviour
 {
     [SerializeField]
+    private Transform tempParentForSlots;
+    [SerializeField]
+    private Text descriptionPanelText;
+    [SerializeField]
     private GameObject slotPref, inventoryPanel, chestPanel, inventoryContent, chestContent, descriptionPanel;
     public ItemData[] items;
     public List<GameObject> inventorySlots = new List<GameObject>();
@@ -24,11 +28,21 @@ public class InventoryManager : MonoBehaviour
         chestPanel.SetActive(false);
         descriptionPanel.SetActive(false);
     }
+
+    public Transform GetTempParentForSlots()
+    {
+        return tempParentForSlots;
+    }
+
+    public Text GetDescriptionPanelText()
+    {
+        return descriptionPanelText;
+    }
+
     public GameObject GetDescriptionPanel()
     {
         return descriptionPanel;
     }
-
 
     public GameObject GetInventoryPanel()
     {
@@ -52,10 +66,10 @@ public class InventoryManager : MonoBehaviour
 
     public void CreateItem(int itemId, List<ItemData> items)
     {
-        ItemData item = new ItemData(this.items[itemId].name, 
-                                     this.items[itemId].description, 
-                                     this.items[itemId].id, 
-                                     this.items[itemId].count, 
+        ItemData item = new ItemData(this.items[itemId].name,
+                                     this.items[itemId].description,
+                                     this.items[itemId].id,
+                                     this.items[itemId].count,
                                      this.items[itemId].isUniq);
 
         if (!item.isUniq && items.Count > 0)
@@ -89,7 +103,7 @@ public class InventoryManager : MonoBehaviour
         currentItem.transform.Find("ItemName").GetComponent<Text>().text = item.name;
         currentItem.transform.Find("ItemIcon").GetComponent<Image>().sprite = Resources.Load<Sprite>(item.name);
         currentItem.transform.Find("ItemCount").GetComponent<Text>().text = item.count.ToString();
-        currentItem.transform.Find("ItemCount").GetComponent<Text>().color = 
+        currentItem.transform.Find("ItemCount").GetComponent<Text>().color =
             item.isUniq ? Color.clear : new Color(1, 0.6627451f, 0, 1);
         items.Add(currentItem);
     }

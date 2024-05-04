@@ -6,10 +6,6 @@ using UnityEngine.EventSystems;
 
 public class Slot : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField]
-    private Transform tempParentForSlots;
-    [SerializeField]
-    private Text descriptionPanelText;
     private string parentName;
     public ItemData itemData;
 
@@ -22,38 +18,29 @@ public class Slot : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHa
     {
         if (itemData == null) return;
 
-        bool destroyed = false;
+        bool foundExistingItem = false;
 
-        if (itemData.isUniq || slots.Count == 0)
+        for (int i = 0; i < slots.Count; i++)
+        {
+            if (slots[i].GetComponent<Slot>().itemData.id == itemData.id)
+            {
+                items[i].count += itemData.count;
+                slots[i].transform.Find("ItemCountText").GetComponent<Text>().text = items[i].count.ToString();
+                Destroy(gameObject);
+                foundExistingItem = true;
+                break;
+            }
+        }
+
+        if (!foundExistingItem)
         {
             slots.Add(gameObject);
             items.Add(itemData);
             transform.SetParent(parent);
             parentName = transform.parent.name;
         }
-        else
-        {
-            for (int i = 0; i < slots.Count; i++)
-            {
-                if (slots[i].GetComponent<Slot>().itemData.id == itemData.id)
-                {
-                    items[i].count += itemData.count;
-                    slots[i].transform.Find("ItemCountText").GetComponent<Text>().text = items[i].count.ToString();
-                    Destroy(gameObject);
-                    destroyed = true;
-                    break;
-                }
-            }
-
-            if (!destroyed)
-            {
-                slots.Add(gameObject);
-                items.Add(itemData);
-                transform.SetParent(parent);
-                parentName = transform.parent.name;
-            }
-        }
     }
+
 
     public void OnDrag(PointerEventData eventData)
     {
