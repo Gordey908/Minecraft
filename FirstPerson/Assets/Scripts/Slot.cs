@@ -92,7 +92,7 @@ public class Slot : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHa
         iManager.GetDescriptionPanel().SetActive(true);
         if(itemData != null)
         {
-            iManager.text = itemData.description;
+            iManager.GetDescriptionPanelText().text = itemData.description;
         }
     }
 
