@@ -616,6 +616,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 195038596}
   m_CullTransparentMesh: 1
+--- !u!1 &198856395 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7164388905215982165, guid: 68d103b645066c34a8f278271229b5ea, type: 3}
+  m_PrefabInstance: {fileID: 597047057}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &263079118 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3709866291881910802, guid: 8ee82d0b0e603b04ca9796224b001a8e, type: 3}
@@ -3133,12 +3138,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a04962923091b540a3072155e408343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemYouCanEquipeName: EquipeNotSelected
   characterController: {fileID: 1977516307}
   playerCamera: {fileID: 963194225}
   particleBlockObject: {fileID: 7896619768427481258, guid: 38d293fcaab940444adeba2f57a9c913, type: 3}
-  tool: {fileID: 263079118}
   inventoryItems: []
   currentChestItems: []
+  equipableItems:
+  - {fileID: 263079118}
+  - {fileID: 1803491045}
+  - {fileID: 1134059063}
+  - {fileID: 198856395}
 --- !u!1 &2028430586
 GameObject:
   m_ObjectHideFlags: 0

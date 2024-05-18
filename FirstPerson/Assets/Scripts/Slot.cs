@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class Slot : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler
+public class Slot : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
     private string parentName;
     public ItemData itemData;
@@ -99,5 +99,16 @@ public class Slot : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHa
     public void OnPointerUp(PointerEventData eventData)
     {
         InventoryManager.instance.GetDescriptionPanel().SetActive(false);
+    }
+    public void OnPointerExit(PointerEventData evenData)
+    {
+        PlayerController.instance.itemYouCanEquipeName = PlayerController.EQUIPE_NOT_SELECTED_TEXT;
+    }
+    public void OnPointerEnter(PointerEventData evenData)
+    {
+        if(itemData != null)
+        {
+            PlayerController.instance.itemYouCanEquipeName = PlayerController.EQUIPE_NOT_SELECTED_TEXT;
+        }
     }
 }
