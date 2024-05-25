@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         InventoryManager.instance.CreateItem(0, inventoryItems);
+        EquipeItem("Pickaxe");
     }
 
     private void FixedUpdate()
@@ -62,9 +63,13 @@ public class PlayerController : MonoBehaviour
                 {
                     ObjectInteraction(hit.transform.gameObject);
                 }
+                else if(Input.GetMouseButton(1))
+                {
+                    ItemAbility();
+                }
             }
         }
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && !InventoryManager.instance.GetInventoryPanel().activeSelf)
         {
             OpenInventory();
         }
@@ -72,6 +77,12 @@ public class PlayerController : MonoBehaviour
         {
             CloseInventoryPanel();
         }
+        else if (Input.GetKeyDown(KeyCode.E) && InventoryManager.instance.GetInventoryPanel().activeSelf 
+            && itemYouCanEquipeName != EQUIPE_NOT_SELECTED_TEXT)
+        {
+            EquipeItem(itemYouCanEquipeName);
+        }
+
     }
 
     private void Rotate()
@@ -208,6 +219,73 @@ public class PlayerController : MonoBehaviour
         inventoryManager.inventorySlots.Clear();
         inventoryManager.GetChestPanel().SetActive(false);
         inventoryManager.GetInventoryPanel().SetActive(false);
+    }
+
+    private void EquipeItem(string toolName)
+    {
+        foreach (GameObject tool in equipableItems)
+        {
+            if(toolName == tool.name)
+            {
+                tool.SetActive(true);
+                currentEquipedItem = tool;
+                toolName = EQUIPE_NOT_SELECTED_TEXT;
+            }
+            else
+            {
+                tool.SetActive(false);
+            }
+        }
+    }
+
+    private void ItemAbility()
+    {
+        switch(currentEquipedItem)
+        {
+            case "Ground":
+                CreateBlock();
+                break;
+            case "Meat":
+                break;
+            default:
+                break;
+        }
+    }
+    private void CreateBlock()
+    {
+        GameObject blockPref = Resources.Load<GameObject>("Ground");
+        Vector3 tempPos = hit.transform.gameObject.transform.position;
+        Vector3 newBlockPos = Vector3.zero;
+        if (hit.transform.gameObject.tag == "Block")
+        {
+            GameObject currentBlock = Instantiate(blockPref);
+            if (hit.point.y == tempPos.y + 0.5f)
+            {
+                newBlockPos = new Vector3(tempPos.x, tempPos.y + 1, tempPos.z);
+            }
+            else if (hit.point.y == tempPos.y - 0.5f)
+            {
+                newBlockPos = new Vector3(tempPos.x, tempPos.y - 1, tempPos.z);
+            }
+            GameObject currentBlock = Instantiate(blockPref);
+            if (hit.point.x == tempPos.x + 0.5f)
+            {
+                newBlockPos = new Vector3(tempPos.x, tempPos.y + 1, tempPos.z);
+            }
+            else if (hit.point.x == tempPos.x - 0.5f)
+            {
+                newBlockPos = new Vector3(tempPos.x, tempPos.y - 1, tempPos.z);
+            }
+            GameObject currentBlock = Instantiate(blockPref);
+            if (hit.point.z == tempPos.z + 0.5f)
+            {
+                newBlockPos = new Vector3(tempPos.x, tempPos.y + 1, tempPos.z + 1A);
+            }
+            else if (hit.point.z == tempPos.z - 0.5f)
+            {
+                newBlockPos = new Vector3(tempPos.x, tempPos.y - 1, tempPos.z + 1);
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider col)
