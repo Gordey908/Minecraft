@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -63,7 +64,7 @@ public class PlayerController : MonoBehaviour
                 {
                     ObjectInteraction(hit.transform.gameObject);
                 }
-                else if(Input.GetMouseButton(1))
+                else if (Input.GetMouseButton(1))
                 {
                     ItemAbility();
                 }
@@ -77,7 +78,7 @@ public class PlayerController : MonoBehaviour
         {
             CloseInventoryPanel();
         }
-        else if (Input.GetKeyDown(KeyCode.E) && InventoryManager.instance.GetInventoryPanel().activeSelf 
+        else if (Input.GetKeyDown(KeyCode.E) && InventoryManager.instance.GetInventoryPanel().activeSelf
             && itemYouCanEquipeName != EQUIPE_NOT_SELECTED_TEXT)
         {
             EquipeItem(itemYouCanEquipeName);
@@ -103,7 +104,7 @@ public class PlayerController : MonoBehaviour
         if (characterController.isGrounded)
         {
             verticalSpeed = 0f;
-            if (Input.GetKeyDown(KeyCode.Space)) 
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 verticalSpeed = jumpForce;
             }
@@ -115,13 +116,13 @@ public class PlayerController : MonoBehaviour
 
     private void Dig(Block block)
     {
-        if(Time.time - hitLastTime > 1 / hitScaleSpeed)
+        if (Time.time - hitLastTime > 1 / hitScaleSpeed)
         {
             currentEquipedItem.GetComponent<Animator>().SetTrigger("attack");
             hitLastTime = Time.time;
 
             Tool currentToolInfo = null;
-            if(currentEquipedItem.TryGetComponent<Tool>(out currentToolInfo))
+            if (currentEquipedItem.TryGetComponent<Tool>(out currentToolInfo))
             {
                 block.health -= currentToolInfo.damageToBlock;
             }
@@ -130,7 +131,6 @@ public class PlayerController : MonoBehaviour
                 block.health -= 1;
             }
 
-            block.health -= currentEquipedItem.GetComponent<Tool>().damageToBlock;
             GameObject particleObj = Instantiate(particleBlockObject, block.transform.position, Quaternion.identity);
             particleObj.GetComponent<ParticleSystemRenderer>().material = block.GetComponent<MeshRenderer>().material;
 
@@ -161,7 +161,7 @@ public class PlayerController : MonoBehaviour
     {
         var inventoryManager = InventoryManager.instance;
 
-        if (!inventoryManager.GetInventoryPanel().activeSelf) 
+        if (!inventoryManager.GetInventoryPanel().activeSelf)
         {
             SwitchCursor(true, CursorLockMode.Confined);
 
@@ -180,7 +180,7 @@ public class PlayerController : MonoBehaviour
 
     private void OpenChest()
     {
-        var inventoryManager = InventoryManager.instance;        
+        var inventoryManager = InventoryManager.instance;
 
         if (!inventoryManager.GetChestPanel().activeSelf)
         {
@@ -195,7 +195,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void SwitchCursor(bool active, CursorLockMode lockMode) 
+    private void SwitchCursor(bool active, CursorLockMode lockMode)
     {
         Cursor.visible = active;
         Cursor.lockState = lockMode;
@@ -225,7 +225,7 @@ public class PlayerController : MonoBehaviour
     {
         foreach (GameObject tool in equipableItems)
         {
-            if(toolName == tool.name)
+            if (toolName == tool.name)
             {
                 tool.SetActive(true);
                 currentEquipedItem = tool;
@@ -240,7 +240,7 @@ public class PlayerController : MonoBehaviour
 
     private void ItemAbility()
     {
-        switch(currentEquipedItem)
+        switch (currentEquipedItem.name)
         {
             case "Ground":
                 CreateBlock();
@@ -267,23 +267,48 @@ public class PlayerController : MonoBehaviour
             {
                 newBlockPos = new Vector3(tempPos.x, tempPos.y - 1, tempPos.z);
             }
-            GameObject currentBlock = Instantiate(blockPref);
+
             if (hit.point.x == tempPos.x + 0.5f)
             {
-                newBlockPos = new Vector3(tempPos.x, tempPos.y + 1, tempPos.z);
+                newBlockPos = new Vector3(tempPos.x + 1, tempPos.y, tempPos.z);
             }
             else if (hit.point.x == tempPos.x - 0.5f)
             {
-                newBlockPos = new Vector3(tempPos.x, tempPos.y - 1, tempPos.z);
+                newBlockPos = new Vector3(tempPos.x - 1, tempPos.y, tempPos.z);
             }
-            GameObject currentBlock = Instantiate(blockPref);
+
             if (hit.point.z == tempPos.z + 0.5f)
             {
-                newBlockPos = new Vector3(tempPos.x, tempPos.y + 1, tempPos.z + 1A);
+                newBlockPos = new Vector3(tempPos.x, tempPos.y, tempPos.z + 1);
             }
             else if (hit.point.z == tempPos.z - 0.5f)
             {
-                newBlockPos = new Vector3(tempPos.x, tempPos.y - 1, tempPos.z + 1);
+                newBlockPos = new Vector3(tempPos.x, tempPos.y, tempPos.z + 1);
+            }
+
+            currentBlock.transform.position = newBlockPos;
+            currentBlock.transform.SetParent(hit.transform.gameObject.transform.parent); 
+
+            ModifyItemCount("Ground");
+        }
+    }
+
+    private void ModifyItemCount(string itemName)
+    {
+        foreach (ItemData item in inventoryItems)
+        {
+            if (item.name == itemName)
+            {
+                item.count--;
+                if(item.count  <= 0)
+                {
+                    inventoryItems.Remove(item);
+                    if (inventoryItems.Count > 0)
+                    {
+                        EquipeItem(inventoryItems[0].name);
+                    }
+                }
+                break;
             }
         }
     }

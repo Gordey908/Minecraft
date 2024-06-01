@@ -12,6 +12,12 @@ public class RandomLevelGenerator : MonoBehaviour
 
     private void Start()
     {
+
+    }
+
+    [ContextMenu("CreateLevel")]
+    private void CreateLevel()
+    {
         seedX = Random.Range(0, 10);
         seedY = Random.Range(0, 10);
         for (int x = 0; x < chunkCount; x++)
@@ -35,7 +41,7 @@ public class RandomLevelGenerator : MonoBehaviour
 
     private void CreateChunk(int chunkNumX, int chunkNumZ)
     {
-        GameObject chunk = new GameObject();
+        GameObject chunk = new GameObject(); 
         float chunkX = chunkNumX * chunkSize + chunkSize / 2;
         float chunkZ = chunkNumZ * chunkSize + chunkSize / 2;
         chunk.transform.position = new Vector3(chunkX, 0, chunkZ);
@@ -43,6 +49,8 @@ public class RandomLevelGenerator : MonoBehaviour
         chunk.AddComponent<Chunk>();
         chunk.AddComponent<MeshFilter>();
         chunk.AddComponent<MeshRenderer>();
+
+        chunk.transform.SetParent(transform);
 
         for(int x = chunkNumX * chunkSize; x < chunkNumX * chunkSize + chunkSize; x++)
         {

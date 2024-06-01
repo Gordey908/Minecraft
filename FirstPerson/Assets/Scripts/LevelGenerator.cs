@@ -19,7 +19,7 @@ public class LevelGenerator : MonoBehaviour
             {
                 CreatePiramyd(new Vector3(x * PIRAMYD_BASE, 0f, z * PIRAMYD_BASE));
             }
-        }
+        } 
     }
 
     void Update()
