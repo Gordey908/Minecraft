@@ -102,8 +102,8 @@ public class InventoryManager : MonoBehaviour
         currentItem.GetComponent<Slot>().itemData = item;
         currentItem.transform.Find("ItemName").GetComponent<Text>().text = item.name;
         currentItem.transform.Find("ItemIcon").GetComponent<Image>().sprite = Resources.Load<Sprite>(item.name);
-        //currentItem.transform.Find("ItemCount").GetComponent<Text>().text = item.count.ToString();
-        currentItem.transform.Find("ItemCount").GetComponent<Text>().color =
+        currentItem.transform.Find("ItemCountText").GetComponent<Text>().text = item.count.ToString();
+        currentItem.transform.Find("ItemCountText").GetComponent<Text>().color =
             item.isUniq ? Color.clear : new Color(1, 0.6627451f, 0, 1);
         items.Add(currentItem);
     }

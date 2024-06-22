@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
                 {
                     ObjectInteraction(hit.transform.gameObject);
                 }
-                else if (Input.GetMouseButton(1))
+                else if (Input.GetMouseButtonDown(1))
                 {
                     ItemAbility();
                 }
@@ -299,7 +299,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (hit.point.z == tempPos.z - 0.5f)
             {
-                newBlockPos = new Vector3(tempPos.x, tempPos.y, tempPos.z + 1);
+                newBlockPos = new Vector3(tempPos.x, tempPos.y, tempPos.z - 1);
             }
 
             currentBlock.transform.position = newBlockPos;

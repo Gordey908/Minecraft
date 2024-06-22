@@ -14,7 +14,7 @@ public class Slot : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHa
         parentName = transform.parent.name;
     }
 
-    private void AddToListOnDrag(List<GameObject> slots, List<ItemData> items, Transform parent, ItemData itemData)
+    private void AddToListOnDrag(List<GameObject> slots, List<ItemData> items, Transform parent)
     {
         if (itemData == null) return;
 
@@ -22,7 +22,7 @@ public class Slot : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHa
 
         for (int i = 0; i < slots.Count; i++)
         {
-            if (slots[i].GetComponent<Slot>().itemData.id == itemData.id)
+            if (slots[i].GetComponent<Slot>().itemData.id == itemData.id && !itemData.isUniq)
             {
                 items[i].count += itemData.count;
                 slots[i].transform.Find("ItemCountText").GetComponent<Text>().text = items[i].count.ToString();
@@ -32,7 +32,7 @@ public class Slot : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHa
             }
         }
 
-        if (!foundExistingItem)
+        if (!foundExistingItem || itemData.isUniq)
         {
             slots.Add(gameObject);
             items.Add(itemData);
@@ -67,7 +67,7 @@ public class Slot : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHa
             {
                 inventoryManager.currentChestSlots.Remove(gameObject);
                 pController.currentChestItems.Remove(itemData);
-                AddToListOnDrag(inventoryManager.inventorySlots, pController.inventoryItems, inventoryManager.GetInventoryContent().transform, itemData);
+                AddToListOnDrag(inventoryManager.inventorySlots, pController.inventoryItems, inventoryManager.GetInventoryContent().transform);
             }
         }
         else
@@ -80,7 +80,7 @@ public class Slot : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHa
             {
                 inventoryManager.inventorySlots.Remove(gameObject);
                 pController.inventoryItems.Remove(itemData);
-                AddToListOnDrag(inventoryManager.currentChestSlots, pController.inventoryItems, inventoryManager.GetChestContent().transform, itemData);
+                AddToListOnDrag(inventoryManager.currentChestSlots, pController.currentChestItems, inventoryManager.GetChestContent().transform);
             }
         }
     }
@@ -108,7 +108,7 @@ public class Slot : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHa
     {
         if(itemData != null)
         {
-            PlayerController.instance.itemYouCanEquipeName = PlayerController.EQUIPE_NOT_SELECTED_TEXT;
+            PlayerController.instance.itemYouCanEquipeName = itemData.name;
         }
     }
 }
